@@ -28,7 +28,7 @@ jobs:
       DATABASE_NAME: django_db
       DATABASE_USER: postgres
       DATABASE_PASSWORD: postgres
-      DATABASE_HOST: localhost
+      DATABASE_HOST: localhost  
       DATABASE_PORT: 5432
 
     steps:
@@ -38,15 +38,15 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.10'
+          python-version: 3.10
 
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Run migrations
+      - name: Run migrations (expected to fail for now)
         run: |
           python blog_project/manage.py migrate
 
-      - name: Run tests
+      - name: Run tests (expected to fail for now)
         run: |
           python blog_project/manage.py test
