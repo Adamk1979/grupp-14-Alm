@@ -15,9 +15,9 @@ jobs:
         ports:
           - 5432:5432
         env:
-          POSTGRES_DB: django_db
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: django_db
         options: >-
           --health-cmd "pg_isready -U postgres -d django_db"
           --health-interval 10s
@@ -43,10 +43,25 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      - name: Wait for Postgres
+        run: until pg_isready -h localhost -p 5432 -U postgres; do sleep 1; done
+
       - name: Run migrations (expected to fail for now)
+        env:
+          DATABASE_NAME: django_db
+          DATABASE_USER: postgres
+          DATABASE_PASSWORD: postgres
+          DATABASE_HOST: localhost
+          DATABASE_PORT: 5432
         run: |
           python blog_project/manage.py migrate
 
       - name: Run tests (expected to fail for now)
+        env:
+          DATABASE_NAME: django_db
+          DATABASE_USER: postgres
+          DATABASE_PASSWORD: postgres
+          DATABASE_HOST: localhost
+          DATABASE_PORT: 5432
         run: |
           python blog_project/manage.py test
