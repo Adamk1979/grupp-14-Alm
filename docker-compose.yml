@@ -8,23 +8,17 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: django_db
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
 
   web:
     build: .
-    command: python /app/blog_project/manage.py runserver 0.0.0.0:8000
+    command: python blog_project/manage.py runserver 0.0.0.0:8000
     volumes:
-      - .:/app
+      - .:/code
     ports:
       - "8000:8000"
     depends_on:
       - db
-    environment:
-      DATABASE_NAME: django_db
-      DATABASE_USER: postgres
-      DATABASE_PASSWORD: postgres
-      DATABASE_HOST: db  
-      DATABASE_PORT: 5432
 
 volumes:
-  db_data:
+  postgres_data:
